@@ -7,6 +7,7 @@ import mk.ukim.finki.wp.lab1b.model.exception.CountryNotFoundException;
 import mk.ukim.finki.wp.lab1b.service.application.HostApplicationService;
 import mk.ukim.finki.wp.lab1b.service.domain.CountryService;
 import mk.ukim.finki.wp.lab1b.service.domain.HostService;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -50,5 +51,10 @@ public class HostApplicationServiceImpl implements HostApplicationService {
     @Override
     public Optional<DisplayHostDto> deleteById(Long id) {
         return hostService.deleteById(id).map(DisplayHostDto::from);
+    }
+
+    @Override
+    public Page<DisplayHostDto> findAll(int page, int size, String sortBy) {
+        return null;
     }
 }

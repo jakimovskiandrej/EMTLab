@@ -2,8 +2,10 @@ package mk.ukim.finki.wp.lab1b.web.controller;
 
 import jakarta.validation.Valid;
 import mk.ukim.finki.wp.lab1b.model.dto.CreateHostDto;
+import mk.ukim.finki.wp.lab1b.model.dto.DisplayAccommodationDto;
 import mk.ukim.finki.wp.lab1b.model.dto.DisplayHostDto;
 import mk.ukim.finki.wp.lab1b.service.application.HostApplicationService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -29,6 +31,15 @@ public class HostController {
     @GetMapping
     public ResponseEntity<List<DisplayHostDto>> findAll() {
         return ResponseEntity.ok(hostApplicationService.findAll());
+    }
+
+    @GetMapping("/paginated")
+    public ResponseEntity<Page<DisplayHostDto>> findAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "name") String sortBy
+    ) {
+        return ResponseEntity.ok(hostApplicationService.findAll(page, size, sortBy));
     }
 
     @PostMapping("/add")

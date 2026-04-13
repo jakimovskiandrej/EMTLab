@@ -2,7 +2,6 @@ package mk.ukim.finki.wp.lab1b.model.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +10,20 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @Table(name = "accommodations")
+@NamedEntityGraph(
+        name = "Accommodation.host-country",
+        attributeNodes = {
+                @NamedAttributeNode(value = "host", subgraph = "host-subgraph")
+        },
+        subgraphs = {
+                @NamedSubgraph(
+                        name = "host-subgraph",
+                        attributeNodes = {
+                                @NamedAttributeNode("country")
+                        }
+                )
+        }
+)
 public class Accommodation extends BaseAuditableEntity {
 
     @Id

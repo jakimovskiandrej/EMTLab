@@ -1,11 +1,17 @@
 package mk.ukim.finki.wp.lab1b.service.application.impl;
 
+import mk.ukim.finki.wp.lab1b.events.AccommodationRentedEvent;
+import mk.ukim.finki.wp.lab1b.events.AccommodationSoldOutEvent;
+import mk.ukim.finki.wp.lab1b.model.domain.Accommodation;
 import mk.ukim.finki.wp.lab1b.model.domain.Host;
 import mk.ukim.finki.wp.lab1b.model.dto.*;
 import mk.ukim.finki.wp.lab1b.model.exception.HostNotFoundException;
+import mk.ukim.finki.wp.lab1b.repository.AccommodationRepository;
 import mk.ukim.finki.wp.lab1b.service.application.AccommodationApplicationService;
 import mk.ukim.finki.wp.lab1b.service.domain.AccommodationService;
 import mk.ukim.finki.wp.lab1b.service.domain.HostService;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import java.util.*;
 
@@ -14,10 +20,17 @@ public class AccommodationApplicationServiceImpl implements AccommodationApplica
 
     private final AccommodationService accommodationService;
     private final HostService hostService;
+    private final ApplicationEventPublisher eventPublisher;
+    private final AccommodationRepository accommodationRepository;
 
-    public AccommodationApplicationServiceImpl(AccommodationService accommodationService, HostService hostService) {
+    public AccommodationApplicationServiceImpl(AccommodationService accommodationService,
+                                               HostService hostService,
+                                               ApplicationEventPublisher eventPublisher,
+                                               AccommodationRepository accommodationRepository) {
         this.accommodationService = accommodationService;
         this.hostService = hostService;
+        this.eventPublisher = eventPublisher;
+        this.accommodationRepository = accommodationRepository;
     }
 
     @Override
@@ -48,5 +61,28 @@ public class AccommodationApplicationServiceImpl implements AccommodationApplica
     @Override
     public Optional<DisplayAccommodationDto> deleteById(Long id) {
         return accommodationService.deleteById(id).map(DisplayAccommodationDto::from);
+    }
+
+    @Override
+    public Page<DisplayAccommodationDto> findAll(int page, int size, String sortBy) {
+        return accommodationService.findAll(page,size,sortBy)
+                .map(DisplayAccommodationDto::from);
+    }
+
+    public void rentAccommodation(Long id) {
+        Accommodation acc = accommodationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Not found"));
+
+        acc.setNumRooms(acc.getNumRooms() - 1);
+
+        accommodationRepository.save(acc);
+
+        eventPublisher.publishEvent(new AccommodationRentedEvent(acc));
+
+        if (acc.getNumRooms() == 0) {
+            eventPublisher.publishEvent(
+                    new AccommodationSoldOutEvent(acc)
+            );
+        }
     }
 }

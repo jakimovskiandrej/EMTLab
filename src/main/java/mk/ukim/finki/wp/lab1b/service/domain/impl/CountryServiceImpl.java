@@ -3,6 +3,10 @@ package mk.ukim.finki.wp.lab1b.service.domain.impl;
 import mk.ukim.finki.wp.lab1b.model.domain.Country;
 import mk.ukim.finki.wp.lab1b.repository.CountryRepository;
 import mk.ukim.finki.wp.lab1b.service.domain.CountryService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -45,5 +49,11 @@ public class CountryServiceImpl implements CountryService {
         Optional<Country> country = countryRepository.findById(id);
         country.ifPresent(countryRepository::delete);
         return country;
+    }
+
+    @Override
+    public Page<Country> findAll(int page, int size, String sortBy) {
+        Pageable pageable = PageRequest.of(page,size,Sort.by(sortBy));
+        return countryRepository.findAll(pageable);
     }
 }

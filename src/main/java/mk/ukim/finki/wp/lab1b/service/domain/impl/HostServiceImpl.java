@@ -3,6 +3,10 @@ package mk.ukim.finki.wp.lab1b.service.domain.impl;
 import mk.ukim.finki.wp.lab1b.model.domain.Host;
 import mk.ukim.finki.wp.lab1b.repository.HostRepository;
 import mk.ukim.finki.wp.lab1b.service.domain.HostService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -46,5 +50,11 @@ public class HostServiceImpl implements HostService {
         Optional<Host> host = hostRepository.findById(id);
         host.ifPresent(hostRepository::delete);
         return host;
+    }
+
+    @Override
+    public Page<Host> findAll(int page, int size, String sortBy) {
+        Pageable pageable = PageRequest.of(page,size, Sort.by(sortBy));
+        return hostRepository.findAll(pageable);
     }
 }

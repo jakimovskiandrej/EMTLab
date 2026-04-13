@@ -1,6 +1,7 @@
 package mk.ukim.finki.wp.lab1b.service.domain;
 
 import mk.ukim.finki.wp.lab1b.model.domain.Accommodation;
+import org.springframework.data.domain.Page;
 import java.util.*;
 
 public interface AccommodationService {
@@ -13,4 +14,6 @@ public interface AccommodationService {
     Optional<Accommodation> update(Long id, Accommodation accommodation);
 
     Optional<Accommodation> deleteById(Long id);
+
+    Page<Accommodation> findAll(int page, int size, String sortBy);
 }

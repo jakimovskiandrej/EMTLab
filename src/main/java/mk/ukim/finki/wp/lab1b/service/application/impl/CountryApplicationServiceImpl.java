@@ -4,6 +4,7 @@ import mk.ukim.finki.wp.lab1b.model.dto.CreateCountryDto;
 import mk.ukim.finki.wp.lab1b.model.dto.DisplayCountryDto;
 import mk.ukim.finki.wp.lab1b.service.application.CountryApplicationService;
 import mk.ukim.finki.wp.lab1b.service.domain.CountryService;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import java.util.*;
 
@@ -39,5 +40,10 @@ public class CountryApplicationServiceImpl implements CountryApplicationService 
     @Override
     public Optional<DisplayCountryDto> deleteById(Long id) {
         return countryService.deleteById(id).map(DisplayCountryDto::from);
+    }
+
+    @Override
+    public Page<DisplayCountryDto> findAll(int page, int size, String sortBy) {
+        return null;
     }
 }

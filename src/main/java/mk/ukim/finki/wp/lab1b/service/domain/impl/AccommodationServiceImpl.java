@@ -3,6 +3,10 @@ package mk.ukim.finki.wp.lab1b.service.domain.impl;
 import mk.ukim.finki.wp.lab1b.model.domain.Accommodation;
 import mk.ukim.finki.wp.lab1b.repository.AccommodationRepository;
 import mk.ukim.finki.wp.lab1b.service.domain.AccommodationService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -49,4 +53,11 @@ public class AccommodationServiceImpl implements AccommodationService {
         accommodation.ifPresent(accommodationRepository::delete);
         return accommodation;
     }
+
+    @Override
+    public Page<Accommodation> findAll(int page, int size, String sortBy) {
+        Pageable pageable = PageRequest.of(page,size, Sort.by(sortBy));
+        return accommodationRepository.findAll(pageable);
+    }
+
 }

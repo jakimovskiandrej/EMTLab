@@ -1,12 +1,13 @@
 package mk.ukim.finki.wp.lab1b.web.controller;
 
 import jakarta.validation.Valid;
-import mk.ukim.finki.wp.lab1b.model.dto.CreateAccommodationDto;
-import mk.ukim.finki.wp.lab1b.model.dto.CreateReviewDto;
-import mk.ukim.finki.wp.lab1b.model.dto.DisplayAccommodationDto;
-import mk.ukim.finki.wp.lab1b.model.dto.DisplayReviewDto;
+import mk.ukim.finki.wp.lab1b.model.dto.*;
+import mk.ukim.finki.wp.lab1b.model.projection.AccommodationStatsProjection;
+import mk.ukim.finki.wp.lab1b.repository.AccommodationStatsRepository;
+import mk.ukim.finki.wp.lab1b.service.application.AccommodationActivityService;
 import mk.ukim.finki.wp.lab1b.service.application.AccommodationApplicationService;
 import mk.ukim.finki.wp.lab1b.service.application.ReviewApplicationService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -17,10 +18,17 @@ public class AccommodationController {
 
     private final AccommodationApplicationService accommodationApplicationService;
     private final ReviewApplicationService reviewApplicationService;
+    private final AccommodationStatsRepository accommodationStatsRepository;
+    private final AccommodationActivityService accommodationActivityService;
 
-    public AccommodationController(AccommodationApplicationService accommodationApplicationService, ReviewApplicationService reviewApplicationService) {
+    public AccommodationController(AccommodationApplicationService accommodationApplicationService,
+                                   ReviewApplicationService reviewApplicationService,
+                                   AccommodationStatsRepository accommodationStatsRepository,
+                                   AccommodationActivityService accommodationActivityService) {
         this.accommodationApplicationService = accommodationApplicationService;
         this.reviewApplicationService = reviewApplicationService;
+        this.accommodationStatsRepository = accommodationStatsRepository;
+        this.accommodationActivityService = accommodationActivityService;
     }
 
     @GetMapping("/{id}")
@@ -34,6 +42,35 @@ public class AccommodationController {
     @GetMapping
     public ResponseEntity<List<DisplayAccommodationDto>> findAll() {
         return ResponseEntity.ok(accommodationApplicationService.findAll());
+    }
+
+    @PostMapping("/rent/{id}")
+    public void rent(@PathVariable Long id) {
+        accommodationApplicationService.rentAccommodation(id);
+    }
+
+    @GetMapping("/paginated")
+    public ResponseEntity<Page<DisplayAccommodationDto>> findAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "name") String sortBy
+    ) {
+        return ResponseEntity.ok(accommodationApplicationService.findAll(page, size, sortBy));
+    }
+
+    @GetMapping("/stats")
+    public List<AccommodationStatsProjection> getStats() {
+        return accommodationStatsRepository.findStats();
+    }
+
+    @GetMapping("/activities")
+    public ResponseEntity<Page<DisplayAccommodationActivityDto>> getActivities(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return ResponseEntity.ok(
+                accommodationActivityService.findAll(page, size)
+        );
     }
 
     @PostMapping("/add")

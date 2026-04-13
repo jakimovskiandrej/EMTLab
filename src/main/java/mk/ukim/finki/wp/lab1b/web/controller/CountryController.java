@@ -2,8 +2,10 @@ package mk.ukim.finki.wp.lab1b.web.controller;
 
 import jakarta.validation.Valid;
 import mk.ukim.finki.wp.lab1b.model.dto.CreateCountryDto;
+import mk.ukim.finki.wp.lab1b.model.dto.DisplayAccommodationDto;
 import mk.ukim.finki.wp.lab1b.model.dto.DisplayCountryDto;
 import mk.ukim.finki.wp.lab1b.service.application.CountryApplicationService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -29,6 +31,15 @@ public class CountryController {
     @GetMapping
     public ResponseEntity<List<DisplayCountryDto>> findAll() {
         return ResponseEntity.ok(countryApplicationService.findAll());
+    }
+
+    @GetMapping("/paginated")
+    public ResponseEntity<Page<DisplayCountryDto>> findAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "name") String sortBy
+    ) {
+        return ResponseEntity.ok(countryApplicationService.findAll(page, size, sortBy));
     }
 
     @PostMapping("/add")
