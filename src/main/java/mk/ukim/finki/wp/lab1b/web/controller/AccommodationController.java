@@ -73,6 +73,11 @@ public class AccommodationController {
         );
     }
 
+    @GetMapping("/popular")
+    public List<PopularAccommodationDto> getPopularAccommodations() {
+        return accommodationApplicationService.getMostPopularAccommodations();
+    }
+
     @PostMapping("/add")
     public ResponseEntity<DisplayAccommodationDto> create(@RequestBody @Valid CreateAccommodationDto createAccommodationDto) {
         return ResponseEntity.ok(accommodationApplicationService.create(createAccommodationDto));

@@ -2,13 +2,14 @@ package mk.ukim.finki.wp.lab1b.model.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-
+import mk.ukim.finki.wp.lab1b.model.enums.EventType;
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "accommodation_activities")
 public class AccommodationActivity {
 
@@ -16,14 +17,19 @@ public class AccommodationActivity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String accommodationName;
+    @ManyToOne
+    @JoinColumn(name = "accommodation_id")
+    private Accommodation accommodation;
 
+    @Column(name = "timestamp", nullable = false)
     private LocalDateTime timestamp;
 
-    private String eventType;
+    @Column(name = "event_type", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private EventType eventType;
 
-    public AccommodationActivity(String accommodationName, LocalDateTime timestamp, String eventType) {
-        this.accommodationName = accommodationName;
+    public AccommodationActivity(Accommodation accommodation, LocalDateTime timestamp, EventType eventType) {
+        this.accommodation = accommodation;
         this.timestamp = timestamp;
         this.eventType = eventType;
     }

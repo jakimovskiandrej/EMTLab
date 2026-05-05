@@ -75,14 +75,22 @@ public class AccommodationApplicationServiceImpl implements AccommodationApplica
 
         acc.setNumRooms(acc.getNumRooms() - 1);
 
-        accommodationRepository.save(acc);
+        if (acc.getTotalRents() == null) {
+            acc.setTotalRents(1);
+        } else {
+            acc.setTotalRents(acc.getTotalRents() + 1);
+        }
 
+        accommodationRepository.save(acc);
         eventPublisher.publishEvent(new AccommodationRentedEvent(acc));
 
         if (acc.getNumRooms() == 0) {
-            eventPublisher.publishEvent(
-                    new AccommodationSoldOutEvent(acc)
-            );
+            eventPublisher.publishEvent(new AccommodationSoldOutEvent(acc));
         }
+    }
+
+    @Override
+    public List<PopularAccommodationDto> getMostPopularAccommodations() {
+        return accommodationService.getMostPopularAccommodations();
     }
 }

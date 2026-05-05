@@ -2,7 +2,6 @@ package mk.ukim.finki.wp.lab1b.service.domain;
 
 import mk.ukim.finki.wp.lab1b.model.domain.Country;
 import org.springframework.data.domain.Page;
-
 import java.util.*;
 
 public interface CountryService {

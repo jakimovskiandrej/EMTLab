@@ -1,6 +1,9 @@
 package mk.ukim.finki.wp.lab1b.model.dto;
 
 import mk.ukim.finki.wp.lab1b.model.domain.*;
+import mk.ukim.finki.wp.lab1b.model.enums.AccommodationCategory;
+import mk.ukim.finki.wp.lab1b.model.enums.AccommodationCondition;
+
 import java.util.List;
 
 public record DisplayAccommodationDto(Long id,

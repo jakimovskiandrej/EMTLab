@@ -2,8 +2,8 @@ package mk.ukim.finki.wp.lab1b.web.controller;
 
 import jakarta.validation.Valid;
 import mk.ukim.finki.wp.lab1b.model.dto.CreateHostDto;
-import mk.ukim.finki.wp.lab1b.model.dto.DisplayAccommodationDto;
 import mk.ukim.finki.wp.lab1b.model.dto.DisplayHostDto;
+import mk.ukim.finki.wp.lab1b.model.dto.PopularHostDto;
 import mk.ukim.finki.wp.lab1b.service.application.HostApplicationService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +40,11 @@ public class HostController {
             @RequestParam(defaultValue = "name") String sortBy
     ) {
         return ResponseEntity.ok(hostApplicationService.findAll(page, size, sortBy));
+    }
+
+    @GetMapping("/hosts/popular")
+    public List<PopularHostDto> popularHosts() {
+        return hostApplicationService.getMostPopularHosts();
     }
 
     @PostMapping("/add")

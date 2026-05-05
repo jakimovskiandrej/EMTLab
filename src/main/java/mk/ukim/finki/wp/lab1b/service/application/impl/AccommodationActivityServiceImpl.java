@@ -1,6 +1,5 @@
 package mk.ukim.finki.wp.lab1b.service.application.impl;
 
-import mk.ukim.finki.wp.lab1b.model.domain.AccommodationActivity;
 import mk.ukim.finki.wp.lab1b.model.dto.DisplayAccommodationActivityDto;
 import mk.ukim.finki.wp.lab1b.repository.AccommodationActivityRepository;
 import mk.ukim.finki.wp.lab1b.service.application.AccommodationActivityService;
@@ -23,8 +22,9 @@ public class AccommodationActivityServiceImpl implements AccommodationActivitySe
         return repository.findAll(PageRequest.of(page, size))
                 .map(activity -> new DisplayAccommodationActivityDto(
                         activity.getId(),
-                        activity.getAccommodationName(),
-                        activity.getEventType(),
+                        activity.getAccommodation().getId(),
+                        activity.getAccommodation().getName(),
+                        activity.getEventType().name(),
                         activity.getTimestamp()
                 ));
     }

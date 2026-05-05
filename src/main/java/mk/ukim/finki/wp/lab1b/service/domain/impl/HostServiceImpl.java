@@ -1,6 +1,7 @@
 package mk.ukim.finki.wp.lab1b.service.domain.impl;
 
 import mk.ukim.finki.wp.lab1b.model.domain.Host;
+import mk.ukim.finki.wp.lab1b.model.dto.PopularHostDto;
 import mk.ukim.finki.wp.lab1b.repository.HostRepository;
 import mk.ukim.finki.wp.lab1b.service.domain.HostService;
 import org.springframework.data.domain.Page;
@@ -57,4 +58,10 @@ public class HostServiceImpl implements HostService {
         Pageable pageable = PageRequest.of(page,size, Sort.by(sortBy));
         return hostRepository.findAll(pageable);
     }
+
+    @Override
+    public List<PopularHostDto> getMostPopularHosts() {
+        return hostRepository.findMostPopularHosts();
+    }
+
 }

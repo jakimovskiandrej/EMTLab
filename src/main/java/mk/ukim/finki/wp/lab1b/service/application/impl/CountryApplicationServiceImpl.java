@@ -44,6 +44,7 @@ public class CountryApplicationServiceImpl implements CountryApplicationService 
 
     @Override
     public Page<DisplayCountryDto> findAll(int page, int size, String sortBy) {
-        return null;
+        return countryService.findAll(page,size,sortBy)
+                .map(DisplayCountryDto::from);
     }
 }

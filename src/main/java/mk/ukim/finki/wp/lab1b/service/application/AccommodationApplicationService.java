@@ -18,4 +18,6 @@ public interface AccommodationApplicationService {
     Page<DisplayAccommodationDto> findAll(int page, int size, String sortBy);
 
     void rentAccommodation(Long id);
+
+    List<PopularAccommodationDto> getMostPopularAccommodations();
 }

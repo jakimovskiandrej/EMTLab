@@ -2,6 +2,8 @@ package mk.ukim.finki.wp.lab1b.model.dto;
 
 import jakarta.validation.constraints.*;
 import mk.ukim.finki.wp.lab1b.model.domain.*;
+import mk.ukim.finki.wp.lab1b.model.enums.AccommodationCategory;
+import mk.ukim.finki.wp.lab1b.model.enums.AccommodationCondition;
 
 public record CreateAccommodationDto(String name,
                                      AccommodationCondition accommodationCondition,

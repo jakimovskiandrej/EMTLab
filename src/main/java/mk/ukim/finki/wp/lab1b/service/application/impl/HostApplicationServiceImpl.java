@@ -3,6 +3,7 @@ package mk.ukim.finki.wp.lab1b.service.application.impl;
 import mk.ukim.finki.wp.lab1b.model.domain.Country;
 import mk.ukim.finki.wp.lab1b.model.dto.CreateHostDto;
 import mk.ukim.finki.wp.lab1b.model.dto.DisplayHostDto;
+import mk.ukim.finki.wp.lab1b.model.dto.PopularHostDto;
 import mk.ukim.finki.wp.lab1b.model.exception.CountryNotFoundException;
 import mk.ukim.finki.wp.lab1b.service.application.HostApplicationService;
 import mk.ukim.finki.wp.lab1b.service.domain.CountryService;
@@ -55,6 +56,12 @@ public class HostApplicationServiceImpl implements HostApplicationService {
 
     @Override
     public Page<DisplayHostDto> findAll(int page, int size, String sortBy) {
-        return null;
+        return hostService.findAll(page,size,sortBy)
+                .map(DisplayHostDto::from);
+    }
+
+    @Override
+    public List<PopularHostDto> getMostPopularHosts() {
+        return hostService.getMostPopularHosts();
     }
 }

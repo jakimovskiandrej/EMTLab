@@ -1,6 +1,7 @@
 package mk.ukim.finki.wp.lab1b.service.domain.impl;
 
 import mk.ukim.finki.wp.lab1b.model.domain.Accommodation;
+import mk.ukim.finki.wp.lab1b.model.dto.PopularAccommodationDto;
 import mk.ukim.finki.wp.lab1b.repository.AccommodationRepository;
 import mk.ukim.finki.wp.lab1b.service.domain.AccommodationService;
 import org.springframework.data.domain.Page;
@@ -58,6 +59,11 @@ public class AccommodationServiceImpl implements AccommodationService {
     public Page<Accommodation> findAll(int page, int size, String sortBy) {
         Pageable pageable = PageRequest.of(page,size, Sort.by(sortBy));
         return accommodationRepository.findAll(pageable);
+    }
+
+    @Override
+    public List<PopularAccommodationDto> getMostPopularAccommodations() {
+        return accommodationRepository.findMostPopularAccommodations();
     }
 
 }
